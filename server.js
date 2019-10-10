@@ -15,7 +15,6 @@ app.use(bodyParser.urlencoded({extended: false}))
 
 app.use("/task", tasks)
 app.use("/fresh", fresh)
-
 app.listen(port, function(){
     console.log('Server startec on port ' + port)
 })

@@ -1,7 +1,32 @@
 var express = require("express")
 var router = express.Router()
 const Fresh = require("../model/Fresh")
-const { Op } = require('sequelize')
+
+//Get All products
+router.get("/product",(req, res)=>{
+    console.log('product');
+    Fresh.product.findAll({
+        where: {
+            $or: [
+                {Hold: 0},
+                {$and: [
+                    {Hold: {$or: [1,2]}},
+                    {StockQty: {$gt: 0}}
+                ]}
+            ]
+        },
+        order:[['PID']],
+        //limit: 10, 
+        logging: console.log
+    })
+    .then(products => {
+        console.log(products);
+        res.send(products)
+    })
+    .catch(err => {
+        res.send("error: " + err)
+    })
+})
 
 //Get All productType
 router.get("/productTypes",(req, res)=>{
@@ -19,9 +44,9 @@ router.get("/productTypes",(req, res)=>{
         //limit: 10, 
         logging: console.log
     })
-        .then(tasks => {
-            console.log(tasks);
-            res.send(tasks)
+        .then(productTypes => {
+            console.log(productTypes);
+            res.send(productTypes)
         })
         .catch(err => {
             res.send("error: " + err)
